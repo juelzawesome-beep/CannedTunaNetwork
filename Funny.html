@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MSPA Style Interactive</title>
+    <style>
+        body {
+            background-color: #eeeeee;
+            font-family: "Courier New", Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 50px;
+            margin: 0;
+        }
+
+        #game-container {
+            width: 650px;
+            background: white;
+            border: 2px solid #000;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 5px 5px 0px #ccc;
+        }
+
+        .main-image-container {
+            width: 650px;
+            height: 450px;
+            background-color: #ccc; 
+            border: 2px solid #000;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #panel-art {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        #pesterlog {
+            display: none;
+            background-color: #efefef;
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+            margin: 15px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .ch-Enko { color: #ee9fcd; font-weight: bold; }
+        .ch-Kite { color: #4a5c8d; font-weight: bold; }
+
+        .command-btn {
+            color: #0000FF;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .command-btn:hover { color: #ff0000; }
+
+        /* Inventory Styling */
+        #inventory-display {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px dashed #999;
+            background-color: #f9f9f9;
+            font-size: 0.9rem;
+        }
+
+        .item-card {
+            display: inline-block;
+            background: #fff;
+            border: 1px solid #000;
+            padding: 5px 10px;
+            margin: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <div class="main-image-container">
+            <img id="panel-art" src="EnkoBittermanRoom.png" alt="[ Image Missing ]">
+        </div>
+
+        <h2 id="page-title">The boy? The girl? I dont know really, but they stand in their room.</h2>
+
+        <div id="commands">
+            <span class="command-btn" onclick="openLog()">==> Open Pesterlog.</span>
+            <span class="command-btn" onclick="toggleExamine()">==> Examine room.</span>
+            <span id="cap-btn" class="command-btn" style="display:none;" onclick="addInventory('WEIRD COMPUTER')">==> Captchalogue weird computer.</span>
+        </div>
+
+        <div id="pesterlog">
+            <p><span class="ch-Enko">WH:</span> hello?</p>
+            <p><span class="ch-Kite">GI:</span> Hey faggot! Lol im just kidding.</p>
+            <p><span class="ch-Enko">WH:</span> Hey! Thats not really cool but I dont care</p>
+        </div>
+
+        <div id="inventory-display">
+            Captchalogue Deck: <span id="deck-list">[ EMPTY ]</span>
+        </div>
+    </div>
+
+    <script>
+        let isRoomMessy = false;
+        let myInventory = []; // This is the list of items
+
+        function openLog() {
+            const log = document.getElementById('pesterlog');
+            log.style.display = (log.style.display === "none" || log.style.display === "") ? "block" : "none";
+        }
+
+        function toggleExamine() {
+            const panel = document.getElementById('panel-art');
+            const title = document.getElementById('page-title');
+            const capBtn = document.getElementById('cap-btn');
+
+            if (isRoomMessy === false) {
+                panel.src = "EnkoBittermanMessyroom.png";
+                title.innerText = "You see a pile of TRASH and a weird COMPUTER.";
+                isRoomMessy = true;
+                
+                // Show the captchalogue button only when messy
+                capBtn.style.display = "block"; 
+            } else {
+                panel.src = "EnkoBittermanRoom.png";
+                title.innerText = "The boy? The girl? I dont know really, but they stand in their room.";
+                isRoomMessy = false;
+                
+                // Hide the button when room is clean
+                capBtn.style.display = "none";
+            }
+        }
+
+        function addInventory(itemName) {
+            // 1. Add the item to our list
+            if (!myInventory.includes(itemName)) {
+                myInventory.push(itemName);
+                alert("You captchalogued the " + itemName + "!");
+                updateInventoryUI();
+            } else {
+                alert("You already have that!");
+            }
+        }
+
+        function updateInventoryUI() {
+            const list = document.getElementById('deck-list');
+            
+            // Clear the "[ EMPTY ]" text and add items as cards
+            list.innerHTML = ""; 
+            myInventory.forEach(item => {
+                list.innerHTML += `<span class="item-card">${item}</span>`;
+            });
+        }
+    </script>
+
+</body>
+</html>
